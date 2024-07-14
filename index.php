@@ -1,53 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div class="content">
-      <div class="aside">
-        <div class="menu_a">
-          <div id="menu_c" class="m_ikon">
-            <b class="m_text">MENU</b>
-            <img src="menu.png" onclick="rside()" id="logo_a">
-            <img src="menuc.png" style="margin-left:60px" onclick="lside()" id="logo_b">
-          </div>
-          <div id="siswa" class="m_ikon"><img src="students.png" ><b class="m_text">DATA SISWA</b></div>
-          <div id="guru" class="m_ikon"><img src="teacher.png" ><b class="m_text">DATA GURU</b></div>
-          <div id="kelas" class="m_ikon"><img src="classroom.png"><b class="m_text">LIST KELAS</b></div>
-          <div id="mapel" class="m_ikon"><img src="mapel.png" ><b class="m_text">LIST MAPEL</b></div>
-          <div id="time" class="m_ikon"><img src="schedule.png" ><b class="m_text">DAFTAR WAKTU</b></div>
-          <div id="jadwal" class="m_ikon"><img src="schedule.png" ><b class="m_text">LIST JADWAL</b></div>
-          <div id="nilai" class="m_ikon"><img src="schedule.png" ><b class="m_text">HASIL NILAI</b></div>
-        </div>
-      </div>
-      <article>
-        <header>
-          <h2>INFORMASI AKADEMIK</h2>
-        </header>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;
+background-image:url("https://png.pngtree.com/thumb_back/fw800/background/20200907/pngtree-green-hand-drawn-blackboard-education-school-supplies-background-image_397994.jpg");
+}
+form {border: 3px solid #f1f1f1;}
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.boxi{
+  width: 40%;
+  box-sizing: border-box;
+  border-radius: 15px;
+  box-shadow: 0px 0px 10px rgba(0,0, 0, 1);
+  padding: 5px;
+  margin-bottom:;
+  float:right;
+  color:white;
+  margin-top:120px;
+  margin-right:70px;
+}
+button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+button:hover {
+  opacity: 0.8;
+}
 
-<div id="dsiswa">
-<iframe style=" width: 100%; height: 100%; border: none;" src="http://localhost:3000/siswa/siswa.php"></iframe>
-</div>
+.container {
+  padding: 16px;
+}
 
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+/* Change styles for span and cancel button on extra small screens */
 
-<div id="dguru" class="isi"></div>
+</style>
+</head>
+<body>
 
+<form class="boxi" method="POST">
+  <div class="imgcontainer">
+    <h3>INFORMASI AKADEMIK</h3>
+  </div>
 
-<div id="dkelas" class="isi"></div>
+  <div class="container">
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
 
-
-<div id="dmapel"></div>
-<div id="dtime"></div>
-<div id="djadwal"></div>
-<div id="dnilai"></div>
+    <label for="psw"><b>Password</b></label>
+    <input type="text" placeholder="Enter Password" name="psw" required>
         
-        
-      </article>
-    </div>
-    <script src="script.js"></script>
-  </body>
+    <button type="submit" name="cek">Login</button>
+    <label>
+      <input type="checkbox" checked="checked" name="remember"> Remember me
+    </label>
+  </div>
+
+  <div>
+    <span class="psw">Forgot <a href="#">password?</a></span>
+  </div>
+</form>
+</body>
 </html>
- 
+<?php 
+require("connect.php");
+if(isset($_POST['cek'])){
+  $uname = $_POST["uname"];
+  $psw = $_POST['psw'];
+  $sql="SELECT * FROM akun WHERE username = '$uname'";
+  $result = $conn->query($sql);  
+  $cek = mysqli_num_rows($result);
+  if($cek > 0){
+    $data = $result->fetch_assoc();
+    if($psw==$data["password"]){
+      switch($data['posisi']){
+        case 1:header("Location:vAdmin.php?id='$uname'");
+        break;
+        case 2:header("Location:vSiswa.php?id='$uname'");
+        break;
+        case 3:header("Location:vGuru.php?id='$uname'");
+        break;
+      }
+    }else{
+      echo '<script>alert("Password Username salah")</script>';
+      header("Location:login.php");
+    }
+  }else{
+    echo '<script>alert("Username tidak ditemukan")</script>';
+  }
+}
+?>
