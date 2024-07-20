@@ -90,11 +90,11 @@ if(isset($_POST['cek'])){
     $data = $result->fetch_assoc();
     if($psw==$data["password"]){
       switch($data['posisi']){
-        case 1:header("Location:vAdmin.php?id='$uname'");
+        case 1:header("Location:vAdmin.php");
         break;
-        case 2:header("Location:vSiswa.php?id='$uname'");
+        case 2:header('Location:vSiswa.php?id='.$uname.'"');
         break;
-        case 3:header("Location:vGuru.php?id='$uname'");
+        case 3:header('Location:vGuru.php?id='.$uname.'"');
         break;
       }
     }else{

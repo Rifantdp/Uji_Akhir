@@ -26,9 +26,10 @@
           <h1>INFORMASI SISWA</h1>
           <?php
           require("connect.php");
-          $sql = "SELECT urut_siswa,nis,nama_siswa,gender_siswa,hp_siswa,alamat_siswa,sup_kelas, sub_kelas, wali_kelas FROM data_siswa, data_kelas WHERE data_siswa.id_kelas = data_kelas.id_kelas";
+          $id = '102';
+          $sql = "SELECT data_siswa.nis,nama_siswa,gender_siswa,hp_siswa,alamat_siswa,sup_kelas, sub_kelas, wali_kelas FROM data_siswa, data_kelas WHERE data_siswa.id_kelas = data_kelas.id_kelas AND data_siswa.nis='$id'";
           $result = $conn->query($sql);        
-         $row = $result->fetch_assoc();
+          $row = $result->fetch_assoc();
           echo '<div style="width: 100%;display:flex;align-items:center;justify-content: center;padding-top: 10px;">
       <div class="boxi" style="width:80%;">
         <div style="display: flex;">
@@ -49,19 +50,17 @@
           <div>
           </div>
         </div>
-        <form action="delete.php" method="GET"><button type="submit" name="hapus" value="'.$row['urut_siswa'].'" style="width:5%; float:right; background-color:transparent; border:none;"><img src="delete.png" style="width: 70%;"></button></form>
-        <form action="edit.php" method="GET"><button type="submit" name="edit" value="'.$row['urut_siswa'].'" style="width:5%; float:right; background-color:transparent; border:none;"><img src="pen.png" style="width: 70%;"></button></form>
-      </div>
+       </div>
     </div>';
-    echo '<div style="width: 100%;display:flex;align-items:center;justify-content: center;padding-top: 10px;"><div class="boxi"><table width="100%">
+    echo '<div style="width: 100%;display:flex;align-items:center;justify-content: center;padding-top: 10px;"><div class="boxi" style="width:80%;"><table width="100%">
     <tr>
       <th width="25%">Jadwal</th>
       <th width="10%">Kelas</th>
       <th width="25%">Mapel</th>
       <th width="30%">Pengajar</th>
     </tr>';
-    $sql="SELECT urut_schedule,day_schedule,start_time,end_time,sup_kelas,sub_kelas,judul_mapel,nama_guru,gelar_guru from data_schedule,data_time,data_kelas,data_mapel,data_guru WHERE data_schedule.id_time=data_time.id_time AND data_schedule.id_kelas=71 AND data_schedule.id_kelas=data_kelas.id_kelas AND data_schedule.no_mapel=data_mapel.no_mapel AND data_schedule.nip=data_guru.nip
-";
+    $sql="SELECT urut_schedule,day_schedule,start_time,end_time,sup_kelas,sub_kelas,judul_mapel,nama_guru,gelar_guru from data_schedule,data_time,data_kelas,data_siswa,data_mapel,data_guru WHERE data_schedule.id_time=data_time.id_time AND data_schedule.id_kelas=71 AND data_schedule.id_kelas=data_kelas.id_kelas AND data_schedule.no_mapel=data_mapel.no_mapel AND data_schedule.nip=data_guru.nip
+ AND data_siswa.nis='$id' AND data_siswa.id_kelas = data_kelas.id_kelas";
     $result = $conn->query($sql);
     while($row = $result->fetch_assoc()) {
       echo "<tr><td>"; 
@@ -93,10 +92,10 @@
     }echo "</table></div></div>"
     ?>
         </div>
-        <div class="isi">
-          <h1>INFORMASI NILAI</h1>
+        <div class="isi" style="padding-top:60px;">
+          <h1></h1>
           <div style="width:100% display:flex; float:right;"><a href="whatsapp://send?text=Halo apalabar" action="share/whatsapp/share"  
-        target="_blank">Whatsapp</a><button>PRINT</button></div>
+        target="_blank">Whatsapp</a><button onClick="window.print()">PRINT</button></div>
           <table>
             <tr>
               <th colspan="2">NAMA : </th>
@@ -117,7 +116,7 @@
           <th width="15%">PTS</th>
           <th width="15%">UAS</th>
         </tr>
-        <?php $sql = "SELECT id_nilai,day_schedule,start_time,judul_mapel,sup_kelas,sub_kelas,pts,uas,nama_siswa,nama_guru,gelar_guru from data_nilai,data_schedule,data_time,data_mapel,data_kelas,data_siswa,data_guru WHERE data_nilai.id_schedule=data_schedule.id_schedule AND data_schedule.id_time=data_time.id_time AND data_schedule.no_mapel = data_mapel.no_mapel AND data_schedule.id_kelas=data_kelas.id_kelas AND data_nilai.nis=101 AND data_nilai.nis=data_siswa.nis AND data_nilai.nip=data_guru.nip;";
+        <?php $sql = "SELECT id_nilai,day_schedule,start_time,judul_mapel,sup_kelas,sub_kelas,pts,uas,nama_siswa,nama_guru,gelar_guru from data_nilai,data_schedule,data_time,data_mapel,data_kelas,data_siswa,data_guru WHERE data_nilai.id_schedule=data_schedule.id_schedule AND data_schedule.id_time=data_time.id_time AND data_schedule.no_mapel = data_mapel.no_mapel AND data_schedule.id_kelas=data_kelas.id_kelas AND data_nilai.nis='$id' AND data_nilai.nis=data_siswa.nis AND data_nilai.nip=data_guru.nip";
         $result = $conn->query($sql);
         while($row = $result->fetch_assoc()) {
           echo "<tr><td>";
